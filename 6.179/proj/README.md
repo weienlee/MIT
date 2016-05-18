@@ -3,4 +3,19 @@ This is the final project for [6.179 - Introduction to C and C++](http://ocw.mit
 
 ## Installation
 
+Install dependencies
+```bash
+brew install SDL2
+brew install SDL2_image
+brew install SDL2_ttf
+```
+Build project
+```bash
+make
+```
+Run
+```bash
+./a.out
+```
+
 ## Gameplay
