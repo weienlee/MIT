@@ -80,6 +80,10 @@ var GameState = Backbone.Model.extend({
 
     return "<h3>"+turnName+" turn<h3><h3 style='color: #7CD3A2;'>"+boardName+" board <span class='glyphicon glyphicon-arrow-right'></span></h3>";
   },
+
+  resetGameState: function() {
+	this.initialize();
+  }
 });
 
 var Shot = Backbone.Model.extend({

@@ -128,12 +128,28 @@ Leap.loop({ hand: function(hand) {
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript) {
   var processed = false;
-  if (gameState.get('state') == 'setup') {
+  if (userSaid(transcript, ['restart'])) {
+	  gameState = new GameState({state: 'setup'});
+	  cpuBoard.resetBoard();
+	  playerBoard.resetBoard();
+	  numSetShips = 0;
+	  setupUserInterface();
+  }
+  else if (gameState.get('state') == 'setup') {
     // TODO: 4.3, Starting the game with speech
     // Detect the 'start' command, and start the game if it was said
     if (userSaid(transcript, ['start'])) {
-      gameState.startGame();
-      processed = true;
+	  var finished = true;
+	  playerBoard.get('ships').forEach(function(ship) {
+		  if (!ship.get('isDeployed')) {
+		    finished = false;
+		  }
+	  });
+	  if (finished) {
+		gameState.startGame();
+	  } else {
+		generateSpeech("Please deploy all your ships");
+	  }
     }
   }
 

@@ -16,6 +16,10 @@ var background, turnFeedback, otherFeedback;
 
 // USER INTERFACE SETUP
 var setupUserInterface = function() {
+  console.log("before reset", tiles);
+  tiles = [];
+console.log("after reset", tiles);
+  tileModifiers = [];
   var mainContext = Engine.createContext();
   background = new Surface({
     content: "<h1>battleship</h1>",
@@ -74,6 +78,7 @@ var setupUserInterface = function() {
       tileModifiers.push(tileModifier);
     }
   }
+console.log("after adding", tiles);
   ROWNAMES.slice(0,NUMTILES).forEach(function(rowName, row) {
     var label = new Surface({
         content: rowName,
