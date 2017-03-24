@@ -169,3 +169,7 @@ var userSaid = function(str, commands) {
   }
   return false;
 };
+
+var getRandomInt = function(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+};

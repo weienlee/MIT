@@ -245,12 +245,50 @@ var Board = Backbone.Model.extend({
   autoDeploy: function() {
     var self = this;
     var offset = this.get('name') == 'cpu' ? 1 : 0;
-    this.get('ships').forEach(function(ship, i) {
-      if (! ship.get('isDeployed')) {
-        ship.set('position', {row: 2*i + offset, col: 0});
-        ship.set('isDeployed', true);
+
+    var finished = false;
+    var overlap = false;
+
+    // keep looping until find two non overlapping
+    while (!finished) {
+      // randomly place ships
+      this.get('ships').forEach(function(ship, i) {
+        if (! ship.get('isDeployed')) {
+          var length = ship.get('length');
+          var isVertical = Math.random() < 0.5;
+          var row = 0;
+          var col = 0;
+          ship.set('isVertical', isVertical);
+
+          if (isVertical) {
+            row = getRandomInt(0, NUMTILES - length);
+            col = getRandomInt(0, NUMTILES - 1);
+          } else {
+            row = getRandomInt(0, NUMTILES - 1);
+            col = getRandomInt(0, NUMTILES - length);
+          }
+
+          ship.set('position', {row: row, col: col});
+        }
+      });
+
+      // check if they overlap
+      self.get('ships').forEach(function(ship) {
+		self.get('ships').forEach(function(otherShip) {
+	        if (ship.get('type') != otherShip.get('type')) {
+          		overlap = otherShip.overlaps(ship);
+			}
+		});
+      });
+
+      // if not, then deploy them
+      if (!overlap) {
+        this.get('ships').forEach(function(ship) {
+          ship.set('isDeployed', true);
+        });
+        finished = true;
       }
-    });
+    }
   },
 
   resetBoard: function() {
@@ -300,7 +338,7 @@ var Board = Backbone.Model.extend({
       // check if shot was close
       var numNeighbors = 0;
       for (var i=Math.max(0, position.row - 1); i<= Math.min(NUMTILES-1, position.row+1); i++) {
-	  for (var j=Math.max(0, position.col - 1); j<= Math.min(NUMTILES-1, position.row+1); j++) {
+	  for (var j=Math.max(0, position.col - 1); j<= Math.min(NUMTILES-1, position.col+1); j++) {
 
               this.get('ships').forEach(function(ship) {
 		  var endpoints = ship.getEndpoints();
@@ -315,7 +353,7 @@ var Board = Backbone.Model.extend({
       }
 
       result.numNeighbors = numNeighbors;
-
+	console.log(numNeighbors);
     return result;
   }
 });

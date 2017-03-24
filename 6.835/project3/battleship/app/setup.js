@@ -16,9 +16,7 @@ var background, turnFeedback, otherFeedback;
 
 // USER INTERFACE SETUP
 var setupUserInterface = function() {
-  console.log("before reset", tiles);
   tiles = [];
-console.log("after reset", tiles);
   tileModifiers = [];
   var mainContext = Engine.createContext();
   background = new Surface({
@@ -78,7 +76,6 @@ console.log("after reset", tiles);
       tileModifiers.push(tileModifier);
     }
   }
-console.log("after adding", tiles);
   ROWNAMES.slice(0,NUMTILES).forEach(function(rowName, row) {
     var label = new Surface({
         content: rowName,
