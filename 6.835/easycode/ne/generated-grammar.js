@@ -4,6 +4,11 @@
 function id(x) {return x[0]; }
 var grammar = {
     ParserRules: [
+    {"name": "MAIN", "symbols": ["INITIALIZE"]},
+    {"name": "MAIN", "symbols": ["SET"]},
+    {"name": "MAIN", "symbols": ["RETURN"]},
+    {"name": "MAIN", "symbols": ["FOR"]},
+    {"name": "MAIN", "symbols": ["IF"]},
     {"name": "MAIN", "symbols": ["WHILE"]},
     {"name": "INITIALIZE$string$1", "symbols": [{"literal":"i"}, {"literal":"n"}, {"literal":"i"}, {"literal":"t"}, {"literal":"i"}, {"literal":"a"}, {"literal":"l"}, {"literal":"i"}, {"literal":"z"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "INITIALIZE", "symbols": ["INITIALIZE$string$1", "_", "VARIABLE", "_", "TO", "_", "VALUE"]},

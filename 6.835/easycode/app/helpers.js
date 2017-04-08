@@ -34,3 +34,9 @@ var updateCursor = function(cursorPosition) {
     'top': cursorPosition[1]
   })
 };
+
+var parseInput = function(string) {
+  var parser = new Parser(window.grammar.ParserRules, window.grammar.ParserStart);
+  parser.feed(string);
+  return parser.finish();
+}

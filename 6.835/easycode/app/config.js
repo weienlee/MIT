@@ -1,5 +1,4 @@
 // Config
-
 var Colors = {
   GREY: "#AAAAAA",  // default tile color
   GREEN: "#7CD3A2", // highlighting
@@ -11,3 +10,5 @@ var VOICEINDEX = 20; // UK British Female
 var LEAPSCALE = 0.6;
 var DEBUGSPEECH = true;
 var SKIPSETUP = false;
+
+var parser = new Parser(window.grammar.ParserRules, window.grammar.ParserStart);

@@ -1,13 +1,3 @@
-console.log("TEST");
-
-(function(root, factory) {
-    if (typeof module === 'object' && module.exports) {
-        module.exports = factory();
-    } else {
-        root.nearley = factory();
-    }
-}(this, function() {
-
 function Rule(name, symbols, postprocess) {
     this.id = ++Rule.highestId;
     this.name = name;
@@ -288,11 +278,3 @@ Parser.prototype.finish = function() {
     });
     return considerations.map(function(c) {return c.data; });
 };
-
-return {
-    Parser: Parser,
-    Grammar: Grammar,
-    Rule: Rule,
-};
-
-}));
