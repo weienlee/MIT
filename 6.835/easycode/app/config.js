@@ -11,4 +11,3 @@ var LEAPSCALE = 0.6;
 var DEBUGSPEECH = true;
 var SKIPSETUP = false;
 
-var parser = new Parser(window.grammar.ParserRules, window.grammar.ParserStart);
