@@ -11,20 +11,17 @@ recognition.onresult = function(event) {
   var transcript = '';
   var hasFinal = false;
   for (var i = event.resultIndex; i < event.results.length; ++i) {
+    transcript += event.results[i][0].transcript;
     if (event.results[i].isFinal)
-      hasFinal = true;
-    else
-      transcript += event.results[i][0].transcript;
+      hasFinal = true;      
   }
 
   if (DEBUGSPEECH) {
     if (hasFinal) {
       //otherFeedback.setContent("SPEECH DEBUG: ready");
+      console.log("SEECH DEBUG TRANSCRIPT: " + transcript); 
       console.log("SPEECH DEBUG: ready");
-    } else {
-      //otherFeedback.setContent("SPEECH DEBUG: " + transcript);
-      console.log("SEECH DEBUG: " + transcript);
-    }
+    } 
   }
 
   var processed = debouncedProcessSpeech(transcript);
