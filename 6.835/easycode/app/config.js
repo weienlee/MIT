@@ -11,3 +11,6 @@ var LEAPSCALE = 0.6;
 var DEBUGSPEECH = true;
 var SKIPSETUP = false;
 
+var MARKER = 0;
+var TIMEOUT = null;
+var LINE = null;

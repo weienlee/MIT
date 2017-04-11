@@ -24,3 +24,10 @@ button:focus {outline:0 !important;}
   border-radius: 0;
   font-size: 20px;
 }
+
+.marker {
+  position:absolute;
+  background:rgba(150,150,150,0.5);
+  z-index:5;
+  transition: all 0.3s ease;
+}
