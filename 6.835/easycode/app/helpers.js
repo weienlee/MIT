@@ -33,6 +33,12 @@ var updateCursor = function(cursorPosition) {
     'left': cursorPosition[0],
     'top': cursorPosition[1]
   })
+
+  var x = cursorPosition[0];
+  var y = cursorPosition[1];
+
+  var pos = editor.renderer.screenToTextCoordinates(x, y);
+  editor.moveCursorToPosition(pos);
 };
 
 var parseInput = function(string) {
