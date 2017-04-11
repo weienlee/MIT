@@ -77,8 +77,8 @@ var grammar = {
     {"name": "STRING$ebnf$1$subexpression$1", "symbols": ["STRING$ebnf$1$subexpression$1$string$1"]},
     {"name": "STRING$ebnf$1", "symbols": ["STRING$ebnf$1$subexpression$1"], "postprocess": id},
     {"name": "STRING$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
-    {"name": "STRING$ebnf$2", "symbols": [/[a-zA-z]/]},
-    {"name": "STRING$ebnf$2", "symbols": ["STRING$ebnf$2", /[a-zA-z]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "STRING$ebnf$2", "symbols": [/[a-zA-z" "]/]},
+    {"name": "STRING$ebnf$2", "symbols": ["STRING$ebnf$2", /[a-zA-z" "]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "STRING", "symbols": ["STRING$ebnf$1", "STRING$ebnf$2"], "postprocess": 
             function (data) {
         var value = data[1].join("");

@@ -1,8 +1,8 @@
 var loopIndex = 0;
 
 var generateCode = function(parsedOutput) {
-	var command = parsedOutput[0];
-	var type = command.type;
+	var command = parsedOutput[0][0];
+	var type = command["type"];
 	var code;
 	switch(type) {
 		case "initialize":
@@ -30,7 +30,7 @@ var generateCode = function(parsedOutput) {
 			} else {
 				var loopEnd = command["value"]["value"];
 			}
-			code = "for " + loopIndex + "in " + loopEnd + ":";
+			code = "for " + loopIndex + " in " + loopEnd + ":";
 			break;
 
 		case "ifstatement":
@@ -45,6 +45,7 @@ var generateCode = function(parsedOutput) {
 			code = "while " + boolExpression + ":";
 			break;
 	}
+	return code;
 };
 
 var getComparator = function(comparatorString) {

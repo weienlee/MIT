@@ -32,7 +32,7 @@ NAME -> [a-zA-Z]:+ {% function(d) {return {value:d[0].join("")}} %}
 VARIABLE -> "variable" _ NAME {% function(data) {
 	return {type:"variable", value:data[2]["value"]}} %}
 INT -> [0-9]:+        {% function(d) {return {type:"int", value:d[0].join("")}} %}
-STRING -> ("the string "):? [a-zA-z]:+ {%
+STRING -> ("the string "):? [a-zA-z" "]:+ {%
     function (data) {
 		var value = data[1].join("");
 		if (!data[0] && (value == "true" || value == "false")) {
