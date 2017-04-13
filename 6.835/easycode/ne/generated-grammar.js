@@ -73,13 +73,11 @@ var grammar = {
     {"name": "INT$ebnf$1", "symbols": [/[0-9]/]},
     {"name": "INT$ebnf$1", "symbols": ["INT$ebnf$1", /[0-9]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "INT", "symbols": ["INT$ebnf$1"], "postprocess": function(d) {return {type:"int", value:d[0].join("")}}},
-    {"name": "STRING$ebnf$1$subexpression$1$string$1", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"e"}, {"literal":" "}, {"literal":"s"}, {"literal":"t"}, {"literal":"r"}, {"literal":"i"}, {"literal":"n"}, {"literal":"g"}, {"literal":" "}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "STRING$ebnf$1$subexpression$1", "symbols": ["STRING$ebnf$1$subexpression$1$string$1"]},
-    {"name": "STRING$ebnf$1", "symbols": ["STRING$ebnf$1$subexpression$1"], "postprocess": id},
-    {"name": "STRING$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
-    {"name": "STRING$ebnf$2", "symbols": [/[a-zA-z" "]/]},
-    {"name": "STRING$ebnf$2", "symbols": ["STRING$ebnf$2", /[a-zA-z" "]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "STRING", "symbols": ["STRING$ebnf$1", "STRING$ebnf$2"], "postprocess": 
+    {"name": "STRING$subexpression$1$string$1", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"e"}, {"literal":" "}, {"literal":"s"}, {"literal":"t"}, {"literal":"r"}, {"literal":"i"}, {"literal":"n"}, {"literal":"g"}, {"literal":" "}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "STRING$subexpression$1", "symbols": ["STRING$subexpression$1$string$1"]},
+    {"name": "STRING$ebnf$1", "symbols": [/[a-zA-z" "]/]},
+    {"name": "STRING$ebnf$1", "symbols": ["STRING$ebnf$1", /[a-zA-z" "]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "STRING", "symbols": ["STRING$subexpression$1", "STRING$ebnf$1"], "postprocess": 
             function (data) {
         var value = data[1].join("");
         if (!data[0] && (value == "true" || value == "false")) {
@@ -95,8 +93,10 @@ var grammar = {
     {"name": "VALUE", "symbols": ["STRING"], "postprocess": function(data) {return data[0]}},
     {"name": "VALUE", "symbols": ["INT"], "postprocess": function(data) {return data[0]}},
     {"name": "_", "symbols": [{"literal":" "}], "postprocess": function(data) {return data[0]}},
-    {"name": "TO$string$1", "symbols": [{"literal":"t"}, {"literal":"o"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "TO", "symbols": ["TO$string$1"], "postprocess": function(data) {return data[0]}}
+    {"name": "TO$subexpression$1$string$1", "symbols": [{"literal":"t"}, {"literal":"o"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "TO$subexpression$1", "symbols": ["TO$subexpression$1$string$1"]},
+    {"name": "TO$subexpression$1", "symbols": [/[2]/]},
+    {"name": "TO", "symbols": ["TO$subexpression$1"], "postprocess": function(data) {return data[0][0]}}
 ]
   , ParserStart: "MAIN"
 }

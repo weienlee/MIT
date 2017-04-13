@@ -18,6 +18,14 @@ Leap.loop({ hand: function(hand) {
 // Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript) {
+  transcript = transcript.toLowerCase().trim();
+  console.log(transcript);
+  var code = generateCode(parseInput(transcript));
+  console.log(code);
+  insertLine(code);
+
+
+  /*
   var processed = false;
   if (userSaid(transcript, ['restart'])) {
 	  gameState = new GameState({state: 'setup'});
@@ -69,4 +77,6 @@ var processSpeech = function(transcript) {
   }
 
   return processed;
+  */
+
 };

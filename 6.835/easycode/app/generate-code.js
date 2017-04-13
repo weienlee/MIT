@@ -79,8 +79,8 @@ var getComparator = function(comparatorString) {
 };
 
 var parseBoolExpression = function(boolObject) {
-	var val1 = boolObject["firstVal"];
-	var val2 = boolObject["secondVal"];
+	var val1 = boolObject["firstVal"]["value"];
+	var val2 = boolObject["secondVal"]["value"];
 	var comparator = getComparator(boolObject["comparator"]);
 	return val1 + " " + comparator + " " + val2;
 
