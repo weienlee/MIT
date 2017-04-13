@@ -30,7 +30,7 @@ var generateCode = function(parsedOutput) {
 			} else {
 				var loopEnd = command["value"]["value"];
 			}
-			code = "for " + loopIndex + " in " + loopEnd + ":";
+			code = "for " + forloopVar + " in " + loopEnd + ":";
 			break;
 
 		case "ifstatement":
