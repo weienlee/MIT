@@ -61,7 +61,7 @@ var updateCursor = function(cursorPosition) {
 var parseInput = function(string) {
   var parser = new Parser(window.grammar.ParserRules, window.grammar.ParserStart);
   parser.feed(string);
-  return parser.finish();
+  return parser.finish()[0][0];
 }
 
 var insertLine = function(string) {
@@ -87,4 +87,8 @@ var insertLineToRange = function(string, row) {
   }
   editor.insert('\n');
 
+}
+
+var write = function(string) {
+  insertLine(generateCode(parseInput(string)));
 }

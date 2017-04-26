@@ -18,65 +18,15 @@ Leap.loop({ hand: function(hand) {
 // Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript) {
-  transcript = transcript.toLowerCase().trim();
-  console.log(transcript);
+  var transcript = transcript.toLowerCase().trim();
+  var parsedInput = parseInput(transcript);
+
+  console.log(parsedInput);
+
   var code = generateCode(parseInput(transcript));
   console.log(code);
   insertLine(code);
 
-
-  /*
-  var processed = false;
-  if (userSaid(transcript, ['restart'])) {
-	  gameState = new GameState({state: 'setup'});
-	  cpuBoard.resetBoard();
-	  playerBoard.resetBoard();
-	  numSetShips = 0;
-	  setupUserInterface();
-  }
-  else if (gameState.get('state') == 'setup') {
-    // TODO: 4.3, Starting the game with speech
-    // Detect the 'start' command, and start the game if it was said
-    if (userSaid(transcript, ['start'])) {
-	  var finished = true;
-	  playerBoard.get('ships').forEach(function(ship) {
-		  if (!ship.get('isDeployed')) {
-		    finished = false;
-		  }
-	  });
-	  if (finished) {
-		gameState.startGame();
-	  } else {
-		generateSpeech("Please deploy all your ships");
-	  }
-    }
-  }
-
-  else if (gameState.get('state') == 'playing') {
-    if (gameState.isPlayerTurn()) {
-      // TODO: 4.4, Player's turn
-      // Detect the 'fire' command, and register the shot if it was said
-      if (userSaid(transcript, ['fire'])) {
-        registerPlayerShot();
-
-        processed = true;
-      }
-    }
-
-    else if (gameState.isCpuTurn() && gameState.waitingForPlayer()) {
-      // TODO: 4.5, CPU's turn
-      // Detect the player's response to the CPU's shot: hit, miss, you sunk my ..., game over
-      // and register the CPU's shot if it was said
-      if (userSaid(transcript, HITWORDS.concat(MISSWORDS))) {
-        var response = transcript;
-        registerCpuShot(response);
-
-        processed = true;
-      }
-    }
-  }
-
-  return processed;
-  */
+  return true;
 
 };
