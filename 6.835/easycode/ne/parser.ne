@@ -1,4 +1,27 @@
-MAIN -> INITIALIZE | SET | RETURN | FOR | IF | WHILE
+MAIN -> COMMAND
+
+COMMAND -> (GENERATE | MODIFY) {% function(data) {return data[0][0]} %}
+MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNINDENT) (_ THIS):? {% function(data) {
+	return {command: 
+			{type:data[0][0]}, location:true, code:false};
+}%}
+
+COMMENT -> "comment" {% function(data) {return data[0]} %}
+UNCOMMENT -> "uncomment" {% function(data) {return data[0]} %}
+DELETE -> "delete"  {% function(data) {return data[0]} %}
+INDENT -> "indent" {% function(data) {return data[0]} %}
+UNINDENT -> "unindent" {% function(data) {return data[0]} %}
+THIS -> "this line" {% function(data) {return data[0]} %}
+
+GENERATE -> ACTION (_ LOCATION):? {% function(data) {
+	if (data[1] == null) {
+		return {command:data[0], location:false, code:true}
+	} else {
+		return {command:data[0], location:true, code:true}
+	}
+}%}
+LOCATION -> "here" {% function(data) {return data[0]} %}
+ACTION -> (INITIALIZE | SET | RETURN | FOR | IF | WHILE) {% function(data) {return data[0][0]}%}
 
 # COMMANDS
 INITIALIZE -> "initialize" _ VARIABLE _ TO _ VALUE {% function(data) {
