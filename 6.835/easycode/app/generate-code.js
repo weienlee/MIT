@@ -35,13 +35,13 @@ var generateCode = function(parsedOutput) {
 
 		case "ifstatement":
 			var boolObject = command["boolean"];
-			var boolExpression = parseBoolExpression(boolObject);
+			var boolExpression = parseCompoundBoolean(boolObject);
 			code = "if " + boolExpression + ":";
 			break;
 
 		case "whileloop":
 			var boolObject = command["boolean"];
-			var boolExpression = parseBoolExpression(boolObject);
+			var boolExpression = parseCompoundBoolean(boolObject);
 			code = "while " + boolExpression + ":";
 			break;
 	}
@@ -108,6 +108,15 @@ var getOperator = function(operatorString) {
 			break;
 	}
 	return operator;
+};
+
+var parseCompoundBoolean = function(boolList) {
+	var first = parseBoolExpression(boolList[0]);
+	if (len(boolList) > 1) {
+		var operator = boolList[1];
+		var second = parseBoolExpression(boolList[2]);
+	}
+	return "(" + first + ") " + operator + " (" + second + ")";
 };
 
 var parseBoolExpression = function(boolObject) {
