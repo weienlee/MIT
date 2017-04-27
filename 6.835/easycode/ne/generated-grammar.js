@@ -74,6 +74,7 @@ var grammar = {
     {"name": "ACTION$subexpression$1", "symbols": ["FOR"]},
     {"name": "ACTION$subexpression$1", "symbols": ["IF"]},
     {"name": "ACTION$subexpression$1", "symbols": ["WHILE"]},
+    {"name": "ACTION$subexpression$1", "symbols": ["PRINT"]},
     {"name": "ACTION", "symbols": ["ACTION$subexpression$1"], "postprocess": function(data) {return data[0][0]}},
     {"name": "INITIALIZE$string$1", "symbols": [{"literal":"i"}, {"literal":"n"}, {"literal":"i"}, {"literal":"t"}, {"literal":"i"}, {"literal":"a"}, {"literal":"l"}, {"literal":"i"}, {"literal":"z"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "INITIALIZE", "symbols": ["INITIALIZE$string$1", "_", "VARIABLE", "_", "TO", "_", "VALUE"], "postprocess":  function(data) {
@@ -100,11 +101,17 @@ var grammar = {
         } else {
         	return {type: "forloop", loopOver: "integer", value: data[4][0][0]}
         }}},
+    {"name": "PRINT$string$1", "symbols": [{"literal":"p"}, {"literal":"r"}, {"literal":"i"}, {"literal":"n"}, {"literal":"t"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "PRINT", "symbols": ["PRINT$string$1", "_", "VALUE"], "postprocess":  function(data) {
+        return {
+        	type: "print",
+        	value: data[2]
+        }} },
     {"name": "IF$string$1", "symbols": [{"literal":"i"}, {"literal":"f"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "IF", "symbols": ["IF$string$1", "_", "BOOLEAN_EXPRESSION"], "postprocess":  function(data) {
+    {"name": "IF", "symbols": ["IF$string$1", "_", "BOOLEAN"], "postprocess":  function(data) {
         return {type:"ifstatement", boolean:data[2]}}},
     {"name": "WHILE$string$1", "symbols": [{"literal":"w"}, {"literal":"h"}, {"literal":"i"}, {"literal":"l"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "WHILE", "symbols": ["WHILE$string$1", "_", "BOOLEAN_EXPRESSION"], "postprocess":  function(data) {
+    {"name": "WHILE", "symbols": ["WHILE$string$1", "_", "BOOLEAN"], "postprocess":  function(data) {
         return {type:"whileloop", boolean:data[2]}}},
     {"name": "FORLOOP$string$1", "symbols": [{"literal":"f"}, {"literal":"o"}, {"literal":"r"}, {"literal":" "}, {"literal":"l"}, {"literal":"o"}, {"literal":"o"}, {"literal":"p"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "FORLOOP$subexpression$1$string$1", "symbols": [{"literal":"w"}, {"literal":"h"}, {"literal":"i"}, {"literal":"c"}, {"literal":"h"}], "postprocess": function joiner(d) {return d.join('');}},
@@ -126,9 +133,26 @@ var grammar = {
     {"name": "COMPARATOR$subexpression$1$string$6", "symbols": [{"literal":"g"}, {"literal":"r"}, {"literal":"e"}, {"literal":"a"}, {"literal":"t"}, {"literal":"e"}, {"literal":"r"}, {"literal":" "}, {"literal":"t"}, {"literal":"h"}, {"literal":"a"}, {"literal":"n"}, {"literal":" "}, {"literal":"o"}, {"literal":"r"}, {"literal":" "}, {"literal":"e"}, {"literal":"q"}, {"literal":"u"}, {"literal":"a"}, {"literal":"l"}, {"literal":" "}, {"literal":"t"}, {"literal":"o"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "COMPARATOR$subexpression$1", "symbols": ["COMPARATOR$subexpression$1$string$6"]},
     {"name": "COMPARATOR", "symbols": ["COMPARATOR$subexpression$1"], "postprocess": function(data) {return data[0][0]}},
+    {"name": "BOOLEAN$ebnf$1$subexpression$1", "symbols": ["_", "BOOL_OPERATOR", "_", "BOOLEAN_EXPRESSION"]},
+    {"name": "BOOLEAN$ebnf$1", "symbols": ["BOOLEAN$ebnf$1$subexpression$1"], "postprocess": id},
+    {"name": "BOOLEAN$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "BOOLEAN", "symbols": ["BOOLEAN_EXPRESSION", "BOOLEAN$ebnf$1"], "postprocess":  function(data) {
+        if (data[1] == null) {
+        	return [data[0]];
+        } else {
+        	return [data[0], data[1][1], data[1][3]];
+        }
+        }},
     {"name": "BOOLEAN_EXPRESSION$string$1", "symbols": [{"literal":"i"}, {"literal":"s"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "BOOLEAN_EXPRESSION", "symbols": ["VALUE", "_", "BOOLEAN_EXPRESSION$string$1", "_", "COMPARATOR", "_", "VALUE"], "postprocess":  function(data) {
         return {firstVal:data[0], comparator:data[4], secondVal:data[6]}} },
+    {"name": "BOOL_OPERATOR$subexpression$1", "symbols": ["OR"]},
+    {"name": "BOOL_OPERATOR$subexpression$1", "symbols": ["AND"]},
+    {"name": "BOOL_OPERATOR", "symbols": ["BOOL_OPERATOR$subexpression$1"], "postprocess": function(data) {return data[0][0]}},
+    {"name": "OR$string$1", "symbols": [{"literal":"o"}, {"literal":"r"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "OR", "symbols": ["OR$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "AND$string$1", "symbols": [{"literal":"a"}, {"literal":"n"}, {"literal":"d"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "AND", "symbols": ["AND$string$1"], "postprocess": function(data) {return data[0]}},
     {"name": "NAME$ebnf$1", "symbols": [/[a-zA-Z]/]},
     {"name": "NAME$ebnf$1", "symbols": ["NAME$ebnf$1", /[a-zA-Z]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "NAME", "symbols": ["NAME$ebnf$1"], "postprocess": function(d) {return {value:d[0].join("")}}},

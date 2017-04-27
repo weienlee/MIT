@@ -24,7 +24,7 @@ GENERATE -> ACTION (_ LOCATION):? {% function(data) {
 	}
 }%}
 LOCATION -> "here" {% function(data) {return data[0]} %}
-ACTION -> (INITIALIZE | SET | RETURN | FOR | IF | WHILE) {% function(data) {return data[0][0]}%}
+ACTION -> (INITIALIZE | SET | RETURN | FOR | IF | WHILE | PRINT) {% function(data) {return data[0][0]}%}
 
 # COMMANDS
 INITIALIZE -> "initialize" _ VARIABLE _ TO _ VALUE {% function(data) {
@@ -39,7 +39,11 @@ FOR -> "create" _ "a ":? FORLOOP ((INT _ "times") | ("over" _ VARIABLE)) {% func
 	} else {
 		return {type: "forloop", loopOver: "integer", value: data[4][0][0]}
 	}}%}
-
+PRINT -> "print" _ VALUE {% function(data) {
+	return {
+		type: "print",
+		value: data[2]
+	}} %}
 IF -> "if" _ BOOLEAN {% function(data) {
 	return {type:"ifstatement", boolean:data[2]}}%}
 WHILE -> "while" _ BOOLEAN {% function(data) {
@@ -60,7 +64,7 @@ BOOLEAN -> BOOLEAN_EXPRESSION (_ BOOL_OPERATOR _ BOOLEAN_EXPRESSION):? {% functi
 	}%}
 BOOLEAN_EXPRESSION -> VALUE _ "is" _ COMPARATOR _ VALUE {% function(data) {
 	return {firstVal:data[0], comparator:data[4], secondVal:data[6]}} %}
-	
+
 BOOL_OPERATOR -> (OR | AND) {% function(data) {return data[0][0]} %}
 OR -> "or" {% function(data) {return data[0]} %}
 AND -> "and" {% function(data) {return data[0]} %}
