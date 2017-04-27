@@ -93,6 +93,44 @@ var insertLineToRange = function(string, row) {
 
 }
 
+var comment = function(row) {
+  editor.moveCursorTo(row, 0);
+  editor.insert('#');
+}
+
+var uncomment = function(row) {
+  var line = editor.session.getLine(row).replace("#", "");
+  editor.session.replace({
+    start: {row: row, column: 0},
+    end: {row: row, column: Number.MAX_VALUE}
+  }, line);
+}
+
+var deleteLine = function(row) {
+  editor.session.getDocument().removeLines(row, row);
+}
+
+var indent = function(row) {
+  editor.moveCursorTo(row, 0);
+  editor.indent();
+};
+
+var unindent = function(row) {
+  var line = editor.session.getLine(row);
+  var indent = Math.max(0, editor.session.getLine(row).search(/\S|$/) - 4);
+  console.log(indent);
+  line = ' '.repeat(indent) + line.trim();
+  editor.session.replace({
+    start: {row: row, column: 0},
+    end: {row: row, column: Number.MAX_VALUE}
+  }, line);
+
+};
+
+var undo = function() {
+  editor.undo();
+}
+
 var write = function(string) {
   insertLine(generateCode(parseInput(string)));
 }

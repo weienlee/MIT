@@ -1,7 +1,7 @@
 MAIN -> COMMAND
 
 COMMAND -> (GENERATE | MODIFY) {% function(data) {return data[0][0]} %}
-MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNINDENT) (_ THIS):? {% function(data) {
+MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNDO) (_ THIS):? {% function(data) {
 	return {command:
 			{type:data[0][0]}, location:true, code:false};
 }%}
@@ -10,7 +10,7 @@ COMMENT -> "comment" {% function(data) {return data[0]} %}
 UNCOMMENT -> "uncomment" {% function(data) {return data[0]} %}
 DELETE -> "delete"  {% function(data) {return data[0]} %}
 INDENT -> "indent" {% function(data) {return data[0]} %}
-UNINDENT -> "unindent" {% function(data) {return data[0]} %}
+UNDO -> "undo" {% function(data) {return data[0]} %}
 THIS -> "this line" {% function(data) {return data[0]} %}
 
 GENERATE -> ACTION (_ LOCATION):? {% function(data) {
