@@ -4,12 +4,53 @@
 function id(x) {return x[0]; }
 var grammar = {
     ParserRules: [
-    {"name": "MAIN", "symbols": ["INITIALIZE"]},
-    {"name": "MAIN", "symbols": ["SET"]},
-    {"name": "MAIN", "symbols": ["RETURN"]},
-    {"name": "MAIN", "symbols": ["FOR"]},
-    {"name": "MAIN", "symbols": ["IF"]},
-    {"name": "MAIN", "symbols": ["WHILE"]},
+    {"name": "MAIN", "symbols": ["COMMAND"]},
+    {"name": "COMMAND$subexpression$1", "symbols": ["GENERATE"]},
+    {"name": "COMMAND$subexpression$1", "symbols": ["MODIFY"]},
+    {"name": "COMMAND", "symbols": ["COMMAND$subexpression$1"], "postprocess": function(data) {return data[0][0]}},
+    {"name": "MODIFY$subexpression$1", "symbols": ["COMMENT"]},
+    {"name": "MODIFY$subexpression$1", "symbols": ["UNCOMMENT"]},
+    {"name": "MODIFY$subexpression$1", "symbols": ["DELETE"]},
+    {"name": "MODIFY$subexpression$1", "symbols": ["INDENT"]},
+    {"name": "MODIFY$subexpression$1", "symbols": ["UNINDENT"]},
+    {"name": "MODIFY$ebnf$1$subexpression$1", "symbols": ["_", "THIS"]},
+    {"name": "MODIFY$ebnf$1", "symbols": ["MODIFY$ebnf$1$subexpression$1"], "postprocess": id},
+    {"name": "MODIFY$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "MODIFY", "symbols": ["MODIFY$subexpression$1", "MODIFY$ebnf$1"], "postprocess":  function(data) {
+        	return {command:
+        			{type:data[0][0]}, location:true, code:false};
+        }},
+    {"name": "COMMENT$string$1", "symbols": [{"literal":"c"}, {"literal":"o"}, {"literal":"m"}, {"literal":"m"}, {"literal":"e"}, {"literal":"n"}, {"literal":"t"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "COMMENT", "symbols": ["COMMENT$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "UNCOMMENT$string$1", "symbols": [{"literal":"u"}, {"literal":"n"}, {"literal":"c"}, {"literal":"o"}, {"literal":"m"}, {"literal":"m"}, {"literal":"e"}, {"literal":"n"}, {"literal":"t"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "UNCOMMENT", "symbols": ["UNCOMMENT$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "DELETE$string$1", "symbols": [{"literal":"d"}, {"literal":"e"}, {"literal":"l"}, {"literal":"e"}, {"literal":"t"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "DELETE", "symbols": ["DELETE$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "INDENT$string$1", "symbols": [{"literal":"i"}, {"literal":"n"}, {"literal":"d"}, {"literal":"e"}, {"literal":"n"}, {"literal":"t"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "INDENT", "symbols": ["INDENT$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "UNINDENT$string$1", "symbols": [{"literal":"u"}, {"literal":"n"}, {"literal":"i"}, {"literal":"n"}, {"literal":"d"}, {"literal":"e"}, {"literal":"n"}, {"literal":"t"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "UNINDENT", "symbols": ["UNINDENT$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "THIS$string$1", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"i"}, {"literal":"s"}, {"literal":" "}, {"literal":"l"}, {"literal":"i"}, {"literal":"n"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "THIS", "symbols": ["THIS$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "GENERATE$ebnf$1$subexpression$1", "symbols": ["_", "LOCATION"]},
+    {"name": "GENERATE$ebnf$1", "symbols": ["GENERATE$ebnf$1$subexpression$1"], "postprocess": id},
+    {"name": "GENERATE$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "GENERATE", "symbols": ["ACTION", "GENERATE$ebnf$1"], "postprocess":  function(data) {
+        	if (data[1] == null) {
+        		return {command:data[0], location:false, code:true}
+        	} else {
+        		return {command:data[0], location:true, code:true}
+        	}
+        }},
+    {"name": "LOCATION$string$1", "symbols": [{"literal":"h"}, {"literal":"e"}, {"literal":"r"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "LOCATION", "symbols": ["LOCATION$string$1"], "postprocess": function(data) {return data[0]}},
+    {"name": "ACTION$subexpression$1", "symbols": ["INITIALIZE"]},
+    {"name": "ACTION$subexpression$1", "symbols": ["SET"]},
+    {"name": "ACTION$subexpression$1", "symbols": ["RETURN"]},
+    {"name": "ACTION$subexpression$1", "symbols": ["FOR"]},
+    {"name": "ACTION$subexpression$1", "symbols": ["IF"]},
+    {"name": "ACTION$subexpression$1", "symbols": ["WHILE"]},
+    {"name": "ACTION", "symbols": ["ACTION$subexpression$1"], "postprocess": function(data) {return data[0][0]}},
     {"name": "INITIALIZE$string$1", "symbols": [{"literal":"i"}, {"literal":"n"}, {"literal":"i"}, {"literal":"t"}, {"literal":"i"}, {"literal":"a"}, {"literal":"l"}, {"literal":"i"}, {"literal":"z"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "INITIALIZE", "symbols": ["INITIALIZE$string$1", "_", "VARIABLE", "_", "TO", "_", "VALUE"], "postprocess":  function(data) {
         return {type:"initialize", variable:data[2], value:data[6]}}},
@@ -70,9 +111,12 @@ var grammar = {
     {"name": "VARIABLE$string$1", "symbols": [{"literal":"v"}, {"literal":"a"}, {"literal":"r"}, {"literal":"i"}, {"literal":"a"}, {"literal":"b"}, {"literal":"l"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "VARIABLE", "symbols": ["VARIABLE$string$1", "_", "NAME"], "postprocess":  function(data) {
         return {type:"variable", value:data[2]["value"]}} },
-    {"name": "INT$ebnf$1", "symbols": [/[0-9]/]},
-    {"name": "INT$ebnf$1", "symbols": ["INT$ebnf$1", /[0-9]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "INT", "symbols": ["INT$ebnf$1"], "postprocess": function(d) {return {type:"int", value:d[0].join("")}}},
+    {"name": "INT$ebnf$1$string$1", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"e"}, {"literal":" "}, {"literal":"v"}, {"literal":"a"}, {"literal":"l"}, {"literal":"u"}, {"literal":"e"}, {"literal":" "}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "INT$ebnf$1", "symbols": ["INT$ebnf$1$string$1"], "postprocess": id},
+    {"name": "INT$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "INT$ebnf$2", "symbols": [/[0-9]/]},
+    {"name": "INT$ebnf$2", "symbols": ["INT$ebnf$2", /[0-9]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "INT", "symbols": ["INT$ebnf$1", "INT$ebnf$2"], "postprocess": function(d) {return {type:"int", value:d[1].join("")}}},
     {"name": "STRING$subexpression$1$string$1", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"e"}, {"literal":" "}, {"literal":"s"}, {"literal":"t"}, {"literal":"r"}, {"literal":"i"}, {"literal":"n"}, {"literal":"g"}, {"literal":" "}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "STRING$subexpression$1", "symbols": ["STRING$subexpression$1$string$1"]},
     {"name": "STRING$ebnf$1", "symbols": [/[a-zA-z" "]/]},
