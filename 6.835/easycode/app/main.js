@@ -35,7 +35,26 @@ var processSpeech = function(transcript) {
     }
   } else {
     // handle modify commands
-
+    var type = command.type;
+    switch (type) {
+      case ("indent"):
+        indent(LINE);
+        break;
+      case ("undo"):
+        undo();
+        break;
+      case ("delete"):
+        deleteLine(LINE);
+        break;
+      case ("comment"):
+        comment(LINE);
+        break;
+      case ("uncomment"):
+        uncomment(LINE);
+        break;
+      default:
+        break;
+    }
   }
 
 
