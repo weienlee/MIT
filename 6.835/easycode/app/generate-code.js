@@ -111,8 +111,8 @@ var getOperator = function(operatorString) {
 };
 
 var parseBoolExpression = function(boolObject) {
-	var val1 = boolObject["firstVal"]["value"];
-	var val2 = boolObject["secondVal"]["value"];
+	var val1 = getValue(boolObject["firstVal"]);
+	var val2 = getValue(boolObject["secondVal"]);
 	var comparator = getComparator(boolObject["comparator"]);
 	return val1 + " " + comparator + " " + val2;
 
