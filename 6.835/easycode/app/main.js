@@ -21,12 +21,24 @@ var processSpeech = function(transcript) {
   var transcript = transcript.toLowerCase().trim();
   var parsedInput = parseInput(transcript);
 
-  console.log(parsedInput);
+  var command = parsedInput.command;
 
-  var code = generateCode(parseInput(transcript));
-  console.log(code);
-  insertLine(code);
+  if (parsedInput.code) {
+    var code = generateCode(parseInput(transcript));
 
-  return true;
+    if (parsedInput.location) {
+      // put the code at the specified line
+      insertLineToRange(code, LINE);
+    } else {
+      // just insert code normally
+      insertLine(code);
+    }
+  } else {
+    // handle modify commands
+
+  }
+
+
+  //return true;
 
 };

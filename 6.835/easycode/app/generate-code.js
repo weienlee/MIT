@@ -1,7 +1,7 @@
 var loopIndex = 0;
 
 var generateCode = function(parsedOutput) {
-	var command = parsedOutput;
+	var command = parsedOutput.command;
 	var type = command["type"];
 	var code;
 	switch(type) {

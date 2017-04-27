@@ -70,6 +70,7 @@ var insertLine = function(string) {
 }
 
 var insertLineToRange = function(string, row) {
+  row = row + 1;
   var data = editor.session.getParentFoldRangeData(row);
   var indent;
   var r;
@@ -77,6 +78,9 @@ var insertLineToRange = function(string, row) {
     r = data.range;
   } else {
     r = data.firstRange;
+    editor.moveCursorTo(row - 1, 0);
+    insertLine(string);
+    return;
   }
 
   indent = editor.session.getLine(r.start.row).search(/\S|$/) + 4;
