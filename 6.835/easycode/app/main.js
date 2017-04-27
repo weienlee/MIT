@@ -52,6 +52,9 @@ var processSpeech = function(transcript) {
       case ("uncomment"):
         uncomment(LINE);
         break;
+      case ("new line"):
+        newline(LINE);
+        break;
       default:
         break;
     }

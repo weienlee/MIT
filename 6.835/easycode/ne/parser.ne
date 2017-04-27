@@ -1,7 +1,7 @@
 MAIN -> COMMAND
 
 COMMAND -> (GENERATE | MODIFY) {% function(data) {return data[0][0]} %}
-MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNDO) (_ THIS):? {% function(data) {
+MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNDO | NEWLINE) (_ THIS):? {% function(data) {
 	return {command:
 			{type:data[0][0]}, location:true, code:false};
 }%}
@@ -12,6 +12,7 @@ DELETE -> "delete"  {% function(data) {return data[0]} %}
 INDENT -> "indent" {% function(data) {return data[0]} %}
 UNDO -> "undo" {% function(data) {return data[0]} %}
 THIS -> "this line" {% function(data) {return data[0]} %}
+NEWLINE -> "insert ":? "new line" {% function(data) {return data[1]} %}
 
 GENERATE -> ACTION (_ LOCATION):? {% function(data) {
 	if (data[1] == null) {

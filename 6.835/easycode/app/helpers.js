@@ -106,6 +106,11 @@ var uncomment = function(row) {
   }, line);
 }
 
+var newline = function(row) {
+  editor.moveCursorTo(row, 0);
+  editor.insert('\n');
+}
+
 var deleteLine = function(row) {
   editor.session.getDocument().removeLines(row, row);
 }
