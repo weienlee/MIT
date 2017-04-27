@@ -40,9 +40,9 @@ FOR -> "create" _ "a ":? FORLOOP ((INT _ "times") | ("over" _ VARIABLE)) {% func
 		return {type: "forloop", loopOver: "integer", value: data[4][0][0]}
 	}}%}
 
-IF -> "if" _ BOOLEAN_EXPRESSION {% function(data) {
+IF -> "if" _ BOOLEAN {% function(data) {
 	return {type:"ifstatement", boolean:data[2]}}%}
-WHILE -> "while" _ BOOLEAN_EXPRESSION {% function(data) {
+WHILE -> "while" _ BOOLEAN {% function(data) {
 	return {type:"whileloop", boolean:data[2]}}%}
 
 
@@ -51,8 +51,19 @@ WHILE -> "while" _ BOOLEAN_EXPRESSION {% function(data) {
 FORLOOP -> "for loop" _ ("which" | "that") _ "iterates" _
 
 COMPARATOR -> ("less than" | "greater than" | "equal to" | "not equal to" | "less than or equal to" | "greater than or equal to") {% function(data) {return data[0][0]} %}
+BOOLEAN -> BOOLEAN_EXPRESSION (_ BOOL_OPERATOR _ BOOLEAN_EXPRESSION):? {% function(data) {
+	if (data[1] == null) {
+		return [data[0]];
+	} else {
+		return [data[0], data[1][1], data[1][3]];
+	}
+	}%}
 BOOLEAN_EXPRESSION -> VALUE _ "is" _ COMPARATOR _ VALUE {% function(data) {
 	return {firstVal:data[0], comparator:data[4], secondVal:data[6]}} %}
+	
+BOOL_OPERATOR -> (OR | AND) {% function(data) {return data[0][0]} %}
+OR -> "or" {% function(data) {return data[0]} %}
+AND -> "and" {% function(data) {return data[0]} %}
 
 NAME -> [a-zA-Z]:+ {% function(d) {return {value:d[0].join("")}} %}
 VARIABLE -> "variable" _ NAME {% function(data) {
