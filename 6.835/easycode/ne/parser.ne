@@ -2,7 +2,7 @@ MAIN -> COMMAND
 
 COMMAND -> (GENERATE | MODIFY) {% function(data) {return data[0][0]} %}
 MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNINDENT) (_ THIS):? {% function(data) {
-	return {command:
+	return {command: 
 			{type:data[0][0]}, location:true, code:false};
 }%}
 
@@ -54,7 +54,7 @@ BOOLEAN_EXPRESSION -> VALUE _ "is" _ COMPARATOR _ VALUE {% function(data) {
 NAME -> [a-zA-Z]:+ {% function(d) {return {value:d[0].join("")}} %}
 VARIABLE -> "variable" _ NAME {% function(data) {
 	return {type:"variable", value:data[2]["value"]}} %}
-INT -> "the value ":? [0-9]:+        {% function(d) {return {type:"int", value:d[1].join("")}} %}
+INT -> "the value ":? [0-9]:+ {% function(d) {return {type:"int", value:d[1].join("")}} %}
 STRING -> ("the string ") [a-zA-z" "]:+ {%
     function (data) {
 		var value = data[1].join("");
@@ -68,7 +68,16 @@ STRING -> ("the string ") [a-zA-z" "]:+ {%
     }
 %}
 
-VALUE -> VARIABLE {% function(data) {return data[0]} %} | STRING {% function(data) {return data[0]} %} | INT {% function(data) {return data[0]} %}
+MATH -> VALUE _ OPERATION _ VALUE {% function(data) {
+	return {type: "math", value1:data[0], value2:data[4], operator:data[2]} }%}
+OPERATION -> (PLUS | MINUS | TIMES | DIVIDE | MOD) {% function(data) {return data[0][0]} %}
+PLUS -> "plus" {% function(data) {return data[0]} %}
+MINUS -> "minus" {% function(data) {return data[0]} %}
+TIMES -> "times" {% function(data) {return data[0]} %}
+DIVIDE -> "divided by" {% function(data) {return data[0]} %}
+MOD -> "mod" {% function(data) {return data[0]} %}
+
+VALUE -> VARIABLE {% function(data) {return data[0]} %} | STRING {% function(data) {return data[0]} %} | INT {% function(data) {return data[0]} %} | MATH {% function(data) {return data[0]} %}
 
 _ -> " " {% function(data) {return data[0]} %}
 TO -> ("to" | [2]) {% function(data) {return data[0][0]} %}

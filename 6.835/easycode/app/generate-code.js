@@ -78,6 +78,33 @@ var getComparator = function(comparatorString) {
 	return symbol;
 };
 
+
+var getOperator = function(operatorString) {
+	var operator;
+	switch(operatorString) {
+		case "plus":
+			operator = "+";
+			break;
+
+		case "minus":
+			operator = "-";
+			break;
+
+		case "times":
+			operator = "*";
+			break;
+
+		case "divided by":
+			operator = "/";
+			break;
+
+		case "mod":
+			operator = "%";
+			break;
+	}
+	return operator;
+};
+
 var parseBoolExpression = function(boolObject) {
 	var val1 = boolObject["firstVal"]["value"];
 	var val2 = boolObject["secondVal"]["value"];
@@ -89,7 +116,10 @@ var parseBoolExpression = function(boolObject) {
 var getValue = function(valueObject) {
 	if (valueObject["type"] == "string") {
 		var value = "'" + valueObject["value"] + "'";
-	} else {
+	} else if (valueObject["type"] == "math") {
+		var value = getValue(valueObject["value1"]) + " " + getOperator(valueObject["operator"]) + " " + getValue(valueObject["value2"]);
+	}
+	else {
 		var value = valueObject["value"];
 	}
 	return value;
