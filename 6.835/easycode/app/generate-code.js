@@ -82,22 +82,27 @@ var getComparator = function(comparatorString) {
 var getOperator = function(operatorString) {
 	var operator;
 	switch(operatorString) {
+		case "+":
 		case "plus":
 			operator = "+";
 			break;
 
+		case "-":
 		case "minus":
 			operator = "-";
 			break;
 
+		case "*":
 		case "times":
 			operator = "*";
 			break;
 
+		case "/":
 		case "divided by":
 			operator = "/";
 			break;
 
+		case "%":
 		case "mod":
 			operator = "%";
 			break;

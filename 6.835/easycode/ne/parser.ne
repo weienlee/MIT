@@ -2,7 +2,7 @@ MAIN -> COMMAND
 
 COMMAND -> (GENERATE | MODIFY) {% function(data) {return data[0][0]} %}
 MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNINDENT) (_ THIS):? {% function(data) {
-	return {command: 
+	return {command:
 			{type:data[0][0]}, location:true, code:false};
 }%}
 
@@ -71,11 +71,11 @@ STRING -> ("the string ") [a-zA-z" "]:+ {%
 MATH -> VALUE _ OPERATION _ VALUE {% function(data) {
 	return {type: "math", value1:data[0], value2:data[4], operator:data[2]} }%}
 OPERATION -> (PLUS | MINUS | TIMES | DIVIDE | MOD) {% function(data) {return data[0][0]} %}
-PLUS -> "plus" {% function(data) {return data[0]} %}
-MINUS -> "minus" {% function(data) {return data[0]} %}
-TIMES -> "times" {% function(data) {return data[0]} %}
-DIVIDE -> "divided by" {% function(data) {return data[0]} %}
-MOD -> "mod" {% function(data) {return data[0]} %}
+PLUS -> ("plus" | "+") {% function(data) {return data[0][0]} %}
+MINUS -> ("minus" | "-") {% function(data) {return data[0][0]} %}
+TIMES -> ("times" | "*") {% function(data) {return data[0][0]} %}
+DIVIDE -> ("divided by" | "/") {% function(data) {return data[0][0]} %}
+MOD -> ("mod" | "%" ) {% function(data) {return data[0][0]} %}
 
 VALUE -> VARIABLE {% function(data) {return data[0]} %} | STRING {% function(data) {return data[0]} %} | INT {% function(data) {return data[0]} %} | MATH {% function(data) {return data[0]} %}
 
