@@ -22,6 +22,11 @@ var generateCode = function(parsedOutput) {
 			code = "return " + value;
 			break;
 
+		case "print":
+			var value = getValue(command["value"]);
+			code = "print " + value;
+			break;
+
 		case "forloop":
 			var forloopVar = getLoopVar(loopIndex);
 			loopIndex += 1;
