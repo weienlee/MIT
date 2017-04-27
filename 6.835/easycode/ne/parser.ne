@@ -1,15 +1,17 @@
 MAIN -> COMMAND
 
 COMMAND -> (GENERATE | MODIFY) {% function(data) {return data[0][0]} %}
-MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNDO | NEWLINE) (_ THIS):? {% function(data) {
+MODIFY -> (COMMENT | UNCOMMENT | DELETE | INDENT | UNINDENT | REDO | UNDO | NEWLINE) (_ THIS):? {% function(data) {
 	return {command:
 			{type:data[0][0]}, location:true, code:false};
 }%}
 
-COMMENT -> "comment" {% function(data) {return data[0]} %}
-UNCOMMENT -> "uncomment" {% function(data) {return data[0]} %}
+COMMENT -> ("comment" | "common") {% function(data) {return "comment"} %}
+UNCOMMENT -> ("uncomment" | "uncommon") {% function(data) {return "uncomment"} %}
 DELETE -> "delete"  {% function(data) {return data[0]} %}
-INDENT -> "indent" {% function(data) {return data[0]} %}
+INDENT -> ("indent" | "intent") {% function(data) {return "indent"} %}
+UNINDENT -> ("unindent" | "an indent") {% function(data) {return "unindent"} %}
+REDO -> "redo" {% function(data) {return data[0]} %}
 UNDO -> "undo" {% function(data) {return data[0]} %}
 THIS -> "this line" {% function(data) {return data[0]} %}
 NEWLINE -> "insert ":? "new line" {% function(data) {return data[1]} %}

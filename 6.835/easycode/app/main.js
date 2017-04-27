@@ -19,6 +19,7 @@ Leap.loop({ hand: function(hand) {
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript) {
   var transcript = transcript.toLowerCase().trim();
+  transcript = text2num(transcript);
   var parsedInput = parseInput(transcript);
 
   var command = parsedInput.command;
@@ -39,6 +40,12 @@ var processSpeech = function(transcript) {
     switch (type) {
       case ("indent"):
         indent(LINE);
+        break;
+      case ("unindent"):
+        unindent(LINE);
+        break;
+      case ("redo"):
+        redo();
         break;
       case ("undo"):
         undo();
