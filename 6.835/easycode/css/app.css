@@ -23,6 +23,43 @@ button:focus {outline:0 !important;}
   border: 0;
   border-radius: 0;
   font-size: 20px;
+  height: calc(100vh - 120px);
+}
+
+.speech-debug {
+  height: 120px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background-color: rgb(87, 87, 87);
+  font-size: 20px;
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
+.speech-debug-label {
+  padding: 10px;
+  color: white;
+}
+
+.speech-debug-text{
+  color: white;
+  height: 28px;
+  padding: 5px 10px;
+}
+
+
+.speech-debug-parsed {
+  padding: 5px 10px;
+  color: rgb(166, 226, 46);
+}
+
+.word {
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.red {
+  color: rgb(249, 38, 114);
 }
 
 .marker {

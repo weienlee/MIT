@@ -22,6 +22,10 @@ var processSpeech = function(transcript) {
   transcript = text2num(transcript);
   var parsedInput = parseInput(transcript);
 
+  if (parsedInput == null) {
+    return;
+  }
+
   var command = parsedInput.command;
 
   if (parsedInput.code) {

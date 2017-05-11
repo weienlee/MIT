@@ -60,8 +60,16 @@ var updateCursor = function(cursorPosition) {
 
 var parseInput = function(string) {
   var parser = new Parser(window.grammar.ParserRules, window.grammar.ParserStart);
-  parser.feed(string);
-  return parser.finish()[0][0];
+  try {
+    parser.feed(string);
+    return parser.finish()[0][0];
+  } catch(parseError) {
+    var index = string.trim().split(' ').indexOf(getWordAt(string, parseError.offset));
+    index += 1; // nth-of-type is 1 indexed
+    $('.speech-debug-parsed .word:nth-of-type(' + index + ')').addClass('red');
+    return;
+  }
+
 }
 
 var insertLine = function(string) {
@@ -187,3 +195,24 @@ function text2num(s) {
     }
     return a.join(' ');
 }
+
+
+function getWordAt(str, pos) {
+
+    // Perform type conversions.
+    str = String(str);
+    pos = Number(pos) >>> 0;
+
+    // Search for the word's beginning and end.
+    var left = str.slice(0, pos + 1).search(/\S+$/),
+        right = str.slice(pos).search(/\s/);
+
+    // The last word in the string is a special case.
+    if (right < 0) {
+        return str.slice(left);
+    }
+
+    // Return the word, using the located bounds to extract it from the string.
+    return str.slice(left, right + pos);
+
+};

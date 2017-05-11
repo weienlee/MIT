@@ -18,9 +18,23 @@ recognition.onresult = function(event) {
 
   if (DEBUGSPEECH) {
     if (hasFinal) {
-      //otherFeedback.setContent("SPEECH DEBUG: ready");
-      console.log("SEECH DEBUG TRANSCRIPT: " + transcript);
-      console.log("SPEECH DEBUG: ready");
+      console.log(transcript);
+      $('.speech-debug-label').html("Speech debug: ready");
+      $('.speech-debug-text .word').remove();
+      $('.speech-debug-parsed .word').remove();
+      var words = transcript.trim().split(' ');
+      for (var i=0; i<words.length; i++) {
+        var word = $('<div class="word">' + words[i] + '</div>');
+        $('.speech-debug-parsed').append(word);
+      }
+    } else {
+      $('.speech-debug-label').html("Speech debug: parsing");
+      $('.speech-debug-text .word').remove();
+      var words = transcript.trim().split(' ');
+      for (var i=0; i<words.length; i++) {
+        var word = $('<div class="word">' + words[i] + '</div>');
+        $('.speech-debug-text').append(word);
+      }
     }
   }
 
