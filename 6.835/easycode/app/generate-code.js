@@ -117,7 +117,7 @@ var getOperator = function(operatorString) {
 
 var parseCompoundBoolean = function(boolList) {
 	var first = parseBoolExpression(boolList[0]);
-	if (len(boolList) > 1) {
+	if (boolList.length > 1) {
 		var operator = boolList[1];
 		var second = parseBoolExpression(boolList[2]);
 	}
